@@ -1,5 +1,6 @@
 import Hash
 import Pair
+import Pair_Equation
 import Pair_Hash
 import Testing
 
@@ -24,20 +25,35 @@ struct `Pair Hash Tests` {
 extension `Pair Hash Tests`.Unit {
 
     @Test
-    func `hashable conformance`() {
-        let a = Pair(1, 2)
-        let b = Pair(1, 2)
-        #expect(a.hashValue == b.hashValue)
+    func `Pair is natively hashable through the seam`() {
+        let first = Pair(Value(raw: 1), Value(raw: 2))
+        let equal = Pair(Value(raw: 1), Value(raw: 2))
+        let different = Pair(Value(raw: 2), Value(raw: 1))
+
+        #expect(Set([first, equal, different]).count == 2)
     }
 
     @Test
-    func `hash protocol noncopyable pair hashes`() {
-        let a = Pair(Ranked(value: 7), Ranked(value: 8))
-        let b = Pair(Ranked(value: 7), Ranked(value: 8))
-        var ha = Hasher()
-        var hb = Hasher()
-        a.hash(into: &ha)
-        b.hash(into: &hb)
-        #expect(ha.finalize() == hb.finalize())
+    func `noncopyable Pair supplies Hash's domain-typed value`() {
+        let first = Pair(Ranked(value: 7), Ranked(value: 8))
+        let second = Pair(Ranked(value: 7), Ranked(value: 8))
+
+        let firstHash: Hash.Value = hash(first)
+        let secondHash: Hash.Value = hash(second)
+        #expect(firstHash == secondHash)
     }
+}
+
+private struct Value: Hash.`Protocol` {
+    let raw: Int
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(raw)
+    }
+}
+
+private func hash<T: Hash.`Protocol` & ~Copyable>(
+    _ value: borrowing T
+) -> Hash.Value {
+    value.hashValue
 }

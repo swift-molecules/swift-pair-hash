@@ -19,7 +19,11 @@ let package = Package(
     ],
     dependencies: [
         .package(
-            url: "https://github.com/swift-molecules/swift-pair.git",
+            url: "https://github.com/swift-atoms/swift-pair.git",
+            branch: "main"
+        ),
+        .package(
+            url: "https://github.com/swift-molecules/swift-pair-equation.git",
             branch: "main"
         ),
         .package(
@@ -32,6 +36,7 @@ let package = Package(
             name: "Pair Hash",
             dependencies: [
                 .product(name: "Pair", package: "swift-pair"),
+                .product(name: "Pair Equation", package: "swift-pair-equation"),
                 .product(name: "Hash", package: "swift-hash"),
             ]
         ),
@@ -40,6 +45,7 @@ let package = Package(
             dependencies: [
                 "Pair Hash",
                 .product(name: "Pair", package: "swift-pair"),
+                .product(name: "Pair Equation", package: "swift-pair-equation"),
                 .product(name: "Hash", package: "swift-hash"),
             ],
             path: "Tests/Pair Hash Tests"

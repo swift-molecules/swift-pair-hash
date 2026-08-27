@@ -1,7 +1,8 @@
 public import Hash
 public import Pair
+public import Pair_Equation
 
-extension Pair: Swift.Hashable
+extension Pair: @retroactive Swift.Hashable
 where
     First: Hash.`Protocol` & ~Copyable,
     Second: Hash.`Protocol` & ~Copyable
@@ -15,7 +16,7 @@ where
     }
 }
 
-extension Pair: Hash.`Protocol`
+extension Pair: @retroactive Hash.`Protocol`
 where
     First: Hash.`Protocol` & ~Copyable,
     Second: Hash.`Protocol` & ~Copyable
